@@ -3,12 +3,15 @@ import { speak } from 'say';
 import Note from './Note';
 import SleepController from './SleepController';
 import Storage, { Category } from './storage';
+import TermInput from './TermInput';
 
-const storage = new Storage();
+const storage = Storage.instance;
 
 const sleepController = new SleepController();
 
 sleepController.dontSleep();
+
+const termInput  = new TermInput();
 
 const connectNote = new Note('d');
 const chooseCategoryNote = new Note('c');

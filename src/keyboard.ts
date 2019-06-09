@@ -61,7 +61,7 @@ function main() {
       main()
     }
   } else {
-    console.error('keyboard doesnt found, find again');
+    // console.error('keyboard doesnt found, find again');
     emitter.emit('finding')
     setTimeout(() => {
 
