@@ -59,9 +59,9 @@ keyboard.on('pageup', () => {
 keyboard.on('pagedown', () => {
   caps = !caps
   if (caps) {
-    capsNote.play()
-  } else {
     capsNote.playBemol();
+  } else {
+    capsNote.play()
   }
 })
 
