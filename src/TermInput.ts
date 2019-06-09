@@ -15,7 +15,8 @@ class TermInput {
   }
 
   onLine(line: string) {
-    const [command, ...args] = line.split(' ')
+    const [command, ...args] = line.split(/\s(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+
     if (command === 'cc') {
       const category = storage.createCategory(args[0], args[1].split(','))
       console.log('category %s created', category.title)
@@ -30,7 +31,7 @@ class TermInput {
       this.reader.setPrompt(category.title + '>> ')
     }
     else if (command === 'cs') {
-      if(this.currentCategory==null){
+      if (this.currentCategory == null) {
         console.log('category doesn\'t selected');
         return
       }
