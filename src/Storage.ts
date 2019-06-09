@@ -5,7 +5,7 @@ import functions from '../data/functions'
 
 
 
-const EXP = /\[(.*)\/(.*)\]/g;
+const EXP = /\[(.*?)\/(.*?)\]/g;
 
 class Item {
   keys: Array<String>

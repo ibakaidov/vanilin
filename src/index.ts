@@ -11,33 +11,44 @@ const sleepController = new SleepController();
 
 sleepController.dontSleep();
 
-const termInput  = new TermInput();
+const termInput = new TermInput();
 
 const connectNote = new Note('d');
 const chooseCategoryNote = new Note('c');
 const exitNote = new Note('b');
 const capsNote = new Note('f');
+const errorNote = new Note('error');
+const compilationNote = new Note('a');
 
 let currentCategory: Category | null = null;
 let caps: boolean = false;
+let compilation: string | null = null;
 
 keyboard.on('found', () => {
   console.log('connected');
-
   connectNote.play()
 })
 
 keyboard.on('key', (key, date) => {
   if (currentCategory == null) {
     currentCategory = storage.findCategoryByKey(key);
-    if (currentCategory == null) return;
+    if (currentCategory == null){ 
+      errorNote.play();''
+      return;
+    }
     chooseCategoryNote.play()
     return
   }
 
   const statement = currentCategory.findStatementByKey(key)
   if (statement == null) return;
-  speak(caps ? statement.textUp : statement.textDown);
+  const text = caps ? statement.textUp : statement.textDown;
+  if (compilation != null) {
+    compilation += ', ' + text;
+    compilationNote.playBemol()
+  } else {
+    speak(text);
+  }
   currentCategory = null
 })
 
@@ -47,11 +58,25 @@ keyboard.on('pageup', () => {
 })
 keyboard.on('pagedown', () => {
   caps = !caps
-  if(caps){
+  if (caps) {
     capsNote.play()
-  }else{
+  } else {
     capsNote.playBemol();
   }
+})
+
+keyboard.on('space', ()=>{
+  if (compilation==null) {
+    compilation='';
+    compilationNote.playBemol()
+  } else {
+    compilation = null;
+    compilationNote.play()
+  }
+})
+keyboard.on('enter', ()=>{
+  speak(compilation)
+  compilation=null
 })
 
 keyboard.on('error', console.error);
