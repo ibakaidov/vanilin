@@ -30,9 +30,12 @@ function main() {
 
   const keyboard = HID.devices().find((device) => device.serialNumber == SERIAL);
 
+  
   if (keyboard) {
     try {
       const hid = new HID.HID(keyboard.path);
+
+      
       emitter.emit('found')
       hid.on('error', (e) => { emitter.emit('error', e); main() })
       hid.on("data", (buffer: Buffer) => {
@@ -58,13 +61,14 @@ function main() {
         }
       })
     } catch (error) {
+      console.error(error);
+      
       main()
     }
   } else {
-    // console.error('keyboard doesnt found, find again');
+    console.error('keyboard doesnt found, find again');
     emitter.emit('finding')
     setTimeout(() => {
-
       main()
     }, 3000);
   }
